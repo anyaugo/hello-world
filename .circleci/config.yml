@@ -13,7 +13,7 @@ jobs:
       - run:
           name: print hello
           command: |
-            echo Hello
+            print (echo) "Hello"
 
   print-world:
     docker:
@@ -22,7 +22,7 @@ jobs:
       - run:
           name: print world
           command: |
-            echo World
+            print (echo) "World"
 workflows:
   # Name the workflow "welcome"
   welcome:
