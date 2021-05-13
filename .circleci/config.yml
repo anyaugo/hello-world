@@ -15,7 +15,7 @@ jobs:
           command: |
             echo Hello > output.txt
       - persist_to_workspace:
-          root: /tmp
+          root: ~/
           paths:
             - "output.txt"
 
@@ -23,6 +23,8 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - attach_workspace:
+          at: ~/
       - run:
           name: print output file
           command: |
