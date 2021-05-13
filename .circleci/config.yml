@@ -6,23 +6,23 @@ orbs:
   welcome: circleci/welcome-orb@0.4.1
 # Orchestrate or schedule a set of jobs
 jobs:
-  print_hello:
+  print-hello:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - run:
-        name: print hello
-        command: |
-        echo Hello
+          name: print hello
+          command: |
+            echo Hello
 
-  print_world:
+  print-world:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - run:
-        name: print world
-        command: |
-        echo World
+          name: print world
+          command: |
+            echo World
 workflows:
   # Name the workflow "welcome"
   welcome:
