@@ -15,7 +15,7 @@ jobs:
           command: |
             echo Hello
 
-  print-job-owner name:
+  print-job-owner-name:
     docker:
       - image: circleci/node:13.8.0
     steps:
