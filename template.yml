@@ -6,7 +6,7 @@ Resources:
     Properties: 
       SecurityGroups:
         - !Ref InstanceSecurityGroup
-      KeyName: udagram-appserver-keypair.pem
+      KeyName: udagram-appserver-keypair
       ImageId: ami-0a858bf97b16a537c
 
   InstanceSecurityGroup:
