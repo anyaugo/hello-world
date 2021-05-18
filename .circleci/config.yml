@@ -15,7 +15,7 @@ jobs:
           name: Create AWS Infrastructure
           command: |
             aws cloudformation create-stack \
-            --stack-name ci_cd-stack \
+            --stack-name ci-cd-stack \
             --template-body template.yml 
             --region=eu-west-2
 workflows:
