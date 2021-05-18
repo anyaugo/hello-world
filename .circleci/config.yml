@@ -8,21 +8,25 @@ version: 2.1
 jobs:
   create-infrastructure:
     docker:
-      - image: amazon/aws-cli
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
+      - add_ssh_keys:
+          fingerprints: ["67:7e:98:3c:27:9e:c6:34:19:db:d4:09:fb:42:bd:8a"]
       - run: 
-          name: Create AWS Infrastructure
+          name: Install dependencies
           command: |
-            aws cloudformation deploy \
-            --stack-name ci-cd-stack \
-            --template-file template.yml 
+            apk add --update ansible
+      - run:
+          name: Configure server
+          command: |
+            ansible-playbook -i inventory.txt main-remote.yml
 workflows:
   # Name the workflow "welcome"
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - create-infrastructure
+      - configure-infrastructure
 # jobs:
 #   update-ec2-invetory:
 #     docker:
