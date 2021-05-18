@@ -6,7 +6,7 @@ version: 2.1
   #welcome: circleci/welcome-orb@0.4.1
 # Orchestrate or schedule a set of jobs
 jobs:
-  create-infrastructure:
+  configure-infrastructure:
     docker:
       - image: python:3.7-alpine3.11
     steps:
