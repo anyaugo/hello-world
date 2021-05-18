@@ -5,24 +5,30 @@ version: 2.1
   # Declare a dependency on the welcome-orb
   #welcome: circleci/welcome-orb@0.4.1
 # Orchestrate or schedule a set of jobs
-commands:
-  error:
-    description: Trigger Pipeline Error
-    steps:
-      - run: return error
 jobs:
-  trigger-error:
+  update-ec2-invetory:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      - error
       - run: 
-          name: Handling Error
-          command: echo "Hello World" 
-          when: on_fail
+          name: Create Inventory File
+          command: |
+          touch ~/inventory
+          echo "[all]" >> ~/inventory
+      - run: 
+          name: Add Instances to Inventory File
+          command: |
+          aws ec2 describe-instances \
+          --query 'Reservations[*].Instances[*].PublicIpAddress' \
+          --filters "Name=tag:Project,Values=Udacity" \
+          --output text >> ~/inventory
+      - save_cache:
+          paths:
+            - ~/inventory
+          key: "inventory file" 
 workflows:
   # Name the workflow "welcome"
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - trigger-error
+      - update-ec2-inventory
