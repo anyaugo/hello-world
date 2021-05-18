@@ -16,8 +16,7 @@ jobs:
           command: |
             aws cloudformation deploy \
             --stack-name ci-cd-stack \
-            --template-file template.yml \
-            --region=eu-west-2
+            --template-file template.yml 
 workflows:
   # Name the workflow "welcome"
   welcome:
