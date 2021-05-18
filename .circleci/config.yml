@@ -13,7 +13,7 @@ jobs:
       - run: 
           name: Create Inventory File
           command: |
-          touch ~/inventory
+          touch ~/inventory \
           echo "[all]" >> ~/inventory
       - run: 
           name: Add Instances to Inventory File
