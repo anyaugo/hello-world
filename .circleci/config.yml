@@ -6,29 +6,48 @@ version: 2.1
   #welcome: circleci/welcome-orb@0.4.1
 # Orchestrate or schedule a set of jobs
 jobs:
-  update-ec2-invetory:
+  create-infrastructure:
     docker:
-      - image: circleci/node:13.8.0
+      - image: amazon/aws-cli
     steps:
+      - checkout
       - run: 
-          name: Create Inventory File
+          name: Create AWS Infrastructure
           command: |
-          touch ~/inventory \
-          echo "[all]" >> ~/inventory
-      - run: 
-          name: Add Instances to Inventory File
-          command: |
-          aws ec2 describe-instances \
-          --query 'Reservations[*].Instances[*].PublicIpAddress' \
-          --filters "Name=tag:Project,Values=Udacity" \
-          --output text >> ~/inventory
-      - save_cache:
-          paths:
-            - ~/inventory
-          key: "inventory file" 
+            aws cloudformation create-stack \
+            --stack-name ci_cd-stack \
+            --template-body template.yml 
+            --region=eu-west-2
 workflows:
   # Name the workflow "welcome"
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - update-ec2-inventory
+      - create-infrastructure
+# jobs:
+#   update-ec2-invetory:
+#     docker:
+#       - image: circleci/node:13.8.0
+#     steps:
+#       - run: 
+#           name: Create Inventory File
+#           command: |
+#           touch ~/inventory \
+#           echo "[all]" >> ~/inventory
+#       - run: 
+#           name: Add Instances to Inventory File
+#           command: |
+#           aws ec2 describe-instances \
+#           --query 'Reservations[*].Instances[*].PublicIpAddress' \
+#           --filters "Name=tag:Project,Values=Udacity" \
+#           --output text >> ~/inventory
+#       - save_cache:
+#           paths:
+#             - ~/inventory
+#           key: "inventory file" 
+# workflows:
+#   # Name the workflow "welcome"
+#   welcome:
+#     # Run the welcome/run job in its own container
+#     jobs:
+#       - update-ec2-inventory      
