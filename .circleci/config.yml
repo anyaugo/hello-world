@@ -13,7 +13,7 @@ commands:
           command: |
             aws cloudformation delete --stack-name prod-${CIRCLE_WORKFLOW_ID}
 jobs:
-  create-infrastructure:
+  build:
     docker:
       - image: amazon/aws-cli
     steps:
@@ -24,27 +24,16 @@ jobs:
             aws clouldformation deploy \
             --template-file template.yml \
             --stack-name prod-${CIRCLE_WORKFLOW_ID}
-
-  smoke-test:
-    docker:
-      - image: amazon/aws-cli
-    steps:
-      - checkout
-      - run: 
-          name: Simulate Error
-          command: |
-            return 1
+      - run: return 1
       - destroy-environment
-          when: on_fail
+        when: on_fail
 workflows:
   # Name the workflow "welcome"
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - create-infrastructure
-      - smoke-test:
-          requires:
-            - "create-infrastructure"
+      - build
+
 # jobs:
 #   update-ec2-invetory:
 #     docker:
