@@ -29,7 +29,7 @@ jobs:
       - run: 
           name: Upload index.html File
           command: |
-            aws s3 sync . s3://"${CIRCLE_WORKFLOW_ID}" --delete
+            aws s3 sync . s3://"${CIRCLE_WORKFLOW_ID:0:7}" --delete
       - destroy_environment
   
   get-last-deployment-id:
