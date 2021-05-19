@@ -12,6 +12,7 @@ commands:
           name: Destroy environment
           command: |
             aws cloudformation delete --stack-name prod-${CIRCLE_WORKFLOW_ID}
+      - when: on_fail
 jobs:
   build:
     docker:
@@ -26,7 +27,6 @@ jobs:
             --stack-name prod-${CIRCLE_WORKFLOW_ID}
       - run: return 1
       - destroy_environment
-        when: on_fail
 workflows:
   # Name the workflow "welcome"
   welcome:
