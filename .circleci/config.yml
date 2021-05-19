@@ -34,7 +34,7 @@ jobs:
           name: Simulate Error
           command: |
             return 1
-      - destroy-environment:
+      - destroy-environment
           when: on_fail
 workflows:
   # Name the workflow "welcome"
