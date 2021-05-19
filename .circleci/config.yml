@@ -6,27 +6,25 @@ version: 2.1
   #welcome: circleci/welcome-orb@0.4.1
 # Orchestrate or schedule a set of jobs
 jobs:
-  configure-infrastructure:
+  smoke-test:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: alpine:latest
     steps:
-      - checkout
-      - add_ssh_keys:
-          fingerprints: ["67:7e:98:3c:27:9e:c6:34:19:db:d4:09:fb:42:bd:8a"]
       - run: 
-          name: Install dependencies
+          name: Smoke Test
           command: |
-            apk add --update ansible
-      - run:
-          name: Configure server
-          command: |
-            ansible-playbook -i inventory.txt main-remote.yml 
+            if curl -s --head "https://google.com" \
+            then \
+            return 0 \
+            else \
+            return 1 \
+            fi
 workflows:
   # Name the workflow "welcome"
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - configure-infrastructure
+      - smoke-test
 # jobs:
 #   update-ec2-invetory:
 #     docker:
