@@ -14,7 +14,7 @@ jobs:
       - run: 
           name: Smoke Test
           command: |
-            if curl -s --head "https://google.com" 
+            if curl -s --head "https://goog333le.com" 
             then 
               return 0 
             else 
