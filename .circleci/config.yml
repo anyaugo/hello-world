@@ -5,27 +5,46 @@ version: 2.1
   # Declare a dependency on the welcome-orb
   #welcome: circleci/welcome-orb@0.4.1
 # Orchestrate or schedule a set of jobs
+commands:
+  destroy-environment:
+    steps:
+      - run:
+          name: Destroy environment
+          command: |
+            aws cloudformation delete --stack-name prod-${CIRCLE_WORKFLOW_ID}
 jobs:
+  create-infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run: 
+          name: Create Infrastructure
+          command: |
+            aws clouldformation deploy \
+            --template-file template.yml \
+            --stack-name prod-${CIRCLE_WORKFLOW_ID}
+
   smoke-test:
     docker:
-      - image: alpine:latest
+      - image: amazon/aws-cli
     steps:
-      - run: apk add --update curl
+      - checkout
       - run: 
-          name: Smoke Test
+          name: Simulate Error
           command: |
-            if curl -s --head "https://goog333le.com" 
-            then 
-              return 0 
-            else 
-              return 1 
-            fi
+            return 1
+      - destroy-environment
+        when: on_fail
 workflows:
   # Name the workflow "welcome"
   welcome:
     # Run the welcome/run job in its own container
     jobs:
-      - smoke-test
+      - create-infrastructure
+      - smoke-test:
+          requires:
+            - "create-infrastructure"
 # jobs:
 #   update-ec2-invetory:
 #     docker:
