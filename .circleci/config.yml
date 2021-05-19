@@ -10,14 +10,15 @@ jobs:
     docker:
       - image: alpine:latest
     steps:
+      - run: apk add --update curl
       - run: 
           name: Smoke Test
           command: |
             if curl -s --head "https://google.com" 
             then 
-            return 0 
+              return 0 
             else 
-            return 1 
+              return 1 
             fi
 workflows:
   # Name the workflow "welcome"
